@@ -11,6 +11,7 @@ const saveMessage = async (message) => {
       },
       body: JSON.stringify(message),
     });
+    console.log(response.json());
     return response.json();
   } catch (e) {
     console.error(e);
