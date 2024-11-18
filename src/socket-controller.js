@@ -2,7 +2,6 @@ const dotenv = require("dotenv");
 const ENV = dotenv.config().parsed;
 
 const saveMessage = async (message) => {
-  let response;
   try {
     let response = await fetch(ENV.API_URL + "/api/v1/chat/save_message", {
       method: "POST",
