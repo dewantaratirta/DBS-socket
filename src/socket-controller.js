@@ -1,20 +1,46 @@
+const dotenv = require("dotenv");
+const ENV = dotenv.config().parsed;
+
+const saveMessage = async (message) => {
+  try {
+    const response = await fetch(ENV.API_URL + "/api/v1/chat/save_message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+  } catch (e) {
+    console.error(e);
+    return false;
+  } finally {
+    return response.json();
+  }
+};
+
 // create controller
 module.exports = (socket, io) => {
-
-
-    socket.on('chat message', (message) => {
-        io.emit('chat message', {
+  socket.on("chat message", (message) => {
+    try {
+      console.log(ENV.API_URL);
+      saveMessage(message).then((res) => {
+        io.emit("chat message", {
             ...message,
-            userId: socket.id
-        });
-    });
+            userId: socket.id,
+          });
+      });
+    } catch (e) {
+      console.error(e);
+    }
 
-    socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
-    });
+  });
 
-    socket.on('error', (error) => {
-        console.error('Socket error:', error);
-    });
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
 
+  socket.on("error", (error) => {
+    console.error("Socket error:", error);
+  });
 };
