@@ -2,8 +2,9 @@ const dotenv = require("dotenv");
 const ENV = dotenv.config().parsed;
 
 const saveMessage = async (message) => {
+  let response;
   try {
-    const response = await fetch(ENV.API_URL + "/api/v1/chat/save_message", {
+    let response = await fetch(ENV.API_URL + "/api/v1/chat/save_message", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -11,11 +12,10 @@ const saveMessage = async (message) => {
       },
       body: JSON.stringify(message),
     });
+    return response.json();
   } catch (e) {
     console.error(e);
     return false;
-  } finally {
-    return response.json();
   }
 };
 
