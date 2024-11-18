@@ -11,8 +11,8 @@ const saveMessage = async (message) => {
       },
       body: JSON.stringify(message),
     });
-    console.log(response.json());
-    return response.json();
+    let resp = response.json();
+    return resp;
   } catch (e) {
     console.error(e);
     return false;
@@ -23,8 +23,8 @@ const saveMessage = async (message) => {
 module.exports = (socket, io) => {
   socket.on("chat message", (message) => {
     try {
-      console.log(ENV.API_URL);
       saveMessage(message).then((res) => {
+        console.log(`laravel resp`, res);
         io.emit("chat message", {
             ...message,
             userId: socket.id,
